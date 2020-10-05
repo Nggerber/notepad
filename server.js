@@ -13,6 +13,38 @@ const PORT = process.env.PORT || 3000
 // sets up the express app to handle data parsing
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
+app.use(express.static("public"))
+
+//api paths
+const userNotes = require('./db/db.json')
+
+//path to read notes from the db json file
+app.get("/api/notes", function (req, res) {
+    res.json(userNotes)
+})
+
+
+//post request to post new notes
+app.post("/api/notes", function (req, res) {
+    //get the data from the request which is a new note
+    let newNote = req.body
+    //add it to the db.json file
+
+    const userNotes = require('./db/db.json')
+    console.log(userNotes)
+    userNotes.push(newNote)
+    fs.writeFile("./db/db.json", JSON.stringify(userNotes), function (err) {
+        if (err) {
+            res.send("failed to save note")
+        }
+        else {
+            res.json(newNote)
+
+        }
+    })
+    //send the note back
+
+})
 
 //html paths
 
@@ -25,25 +57,11 @@ app.get("/notes", function (req, res) {
 // path for our home page
 app.get("*", function (req, res) {
     res.sendFile(path.join(__dirname, "./public/index.html"))
+    console.log("yes")
 
 })
 
-//api paths
-const userNotes = require('./db/db.json')
 
-//path to read notes from the db json file
-app.get("/api/notes", function (req, res) {
-    res.json(userNotes)
-})
-
-
-//post request to post new notes
-app.post("/api/notes", function(req, res){
-
-
-
-    
-})
 
 app.listen(PORT, function () {
     console.log("App listening on PORT: " + PORT)
