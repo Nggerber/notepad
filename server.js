@@ -17,6 +17,7 @@ app.use(express.static("public"))
 
 //api paths
 const userNotes = require('./db/db.json')
+console.log(userNotes)
 
 //path to read notes from the db json file
 app.get("/api/notes", function (req, res) {
@@ -26,6 +27,7 @@ app.get("/api/notes", function (req, res) {
 
 //post request to post new notes
 app.post("/api/notes", function (req, res) {
+
     //get the data from the request which is a new note
     let newNote = req.body
     //add it to the db.json file
@@ -39,12 +41,20 @@ app.post("/api/notes", function (req, res) {
         }
         else {
             res.json(newNote)
-
         }
     })
-    //send the note back
 
 })
+
+app.delete("/api/notes/:id", (req, res) => {
+
+    const userNotes = require('./db/db.json')
+
+    userNotes.splice(req.params.id, 1)
+   
+    fs.writeFileSync("./db/db.json", JSON.stringify(userNotes, null, '\t'))
+    res.json(userNotes)
+});
 
 //html paths
 
