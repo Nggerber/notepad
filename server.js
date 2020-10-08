@@ -21,7 +21,8 @@ console.log(userNotes)
 
 //path to read notes from the db json file
 app.get("/api/notes", function (req, res) {
-    res.json(userNotes)
+    
+    res.json(userNotes.map((notes, i) => ({...notes, id: i + ""})))
 })
 
 
