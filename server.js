@@ -22,6 +22,7 @@ console.log(userNotes)
 //path to read notes from the db json file
 app.get("/api/notes", function (req, res) {
     
+    //uses map to add an id number to each value in the notes array
     res.json(userNotes.map((notes, i) => ({...notes, id: i + ""})))
 })
 
